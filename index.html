@@ -22,29 +22,42 @@
         <div class="col-sm">
             <h1 class="text-center">Ejemplo CRUD Serverless - Aplicación Single Page - Vuejs</h1>
             <div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-1" @click="nuevoEstudiante">Crear Estudiante</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-1" @click="nuevaSolicitud">Crear Solicitud</button>
             </div>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-sm">
+            <div class="d-flex justify-content-end">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" @click="listaSolicitudesMostradas()" value="" id="flexCheckIndeterminate">
+                    <label class="form-check-label" for="flexCheckIndeterminate">
+                        Registros Pasados
+                    </label>
+                </div>
+            </div>
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Matrícula</th>
+                    <th scope="col">ID</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Correo</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col">Matricula</th>
+                    <th scope="col">Laboratorio</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Hora</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="estudiante in estudiantes">
-                    <td>{{estudiante.matricula}}</td>
-                    <td>{{estudiante.nombre}}</td>
-                    <td>{{estudiante.carrera}}</td>
+                <tr v-for="solicitud in solicitudesMostradas">
+                    <td>{{solicitud.id}}</td>
+                    <td>{{solicitud.nombre}}</td>
+                    <td>{{solicitud.matricula}}</td>
+                    <td>{{solicitud.laboratorio}}</td>
+                    <td>{{solicitud.fecha}}</td>
+                    <td>{{solicitud.hora}}</td>
                     <td>
-                        <button type="button" class="btn btn-secondary" @click="editarEstudiante(estudiante)">Editar</button> |
-                        <button type="button" class="btn btn-danger" @click="eliminarEstudiante(estudiante)">Eliminar</button>
+                        <button type="button" class="btn btn-secondary" @click="editarSolicitud(solicitud)">Editar</button> |
+                        <button type="button" class="btn btn-danger" @click="eliminarSolicitud(solicitud)">Eliminar</button>
                     </td>
                 </tr>
                 </tbody>
@@ -52,15 +65,15 @@
         </div>
     </div>
 
-    <div id="modal-1" class="modal fade modal-dialog modal-dialog-centered" >
-        <div class="modal-dialog">
+    <div id="modal-1" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5>{{titulo}}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modal-1" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form @submit.prevent="crearActualizarEstudiante" @reset="limpiar" >
+                    <form @submit.prevent="crearActualizarSolicitud" @reset="limpiar" >
 
                         <!-- Matricula       -->
                         <div class="mb-3">
@@ -86,22 +99,86 @@
                             ></input>
                         </div>
 
-                        <!-- Carrera            -->
+                        <!-- Correo            -->
                         <div class="mb-3">
-                            <label for="g3" class="form-label">Carrera</label>
+                            <label for="g4" class="form-label">Correo</label>
                             <input class="form-control"
-                                   id = "g3"
-                                   v-model="nuevo.carrera"
+                                   id = "g4"
+                                   v-model="nuevo.correo"
                                    type="text"
                                    required
-                                   placeholder="Carrera"
+                                   placeholder="Correo"
                             ></input>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="g5" class="form-label">Laboratorio</label>
+                            <select class="form-control"
+                                   id = "g5"
+                                    name="g5"
+                                   v-model="nuevo.laboratorio"
+                                   required
+                            >
+                                <option value="" disabled selected>Seleccione la fecha</option>
+                                <option value="redes">Redes</option>
+                                <option value="computacion">Computacion</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="g6" class="form-label">Fecha</label>
+                            <input class="form-control"
+                                   id = "g6"
+                                   v-model="nuevo.fecha"
+                                   type="date"
+                                   required
+                                   placeholder="Fecha"
+                            ></input>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="g7" class="form-label">Hora</label>
+                            <select class="form-control"
+                                    id = "g7"
+                                    name="g7"
+                                    v-model="nuevo.hora"
+                                    required
+                            >
+                                <option value="" disabled selected>Seleccione la hora</option>
+                                <option value="8:00 a 9:00">8:00 a 9:00</option>
+                                <option value="9:00 a 10:00">9:00 a 10:00</option>
+                                <option value="10:00 a 11:00">10:00 a 11:00</option>
+                                <option value="11:00 a 12:00">11:00 a 12:00</option>
+                                <option value="12:00 a 13:00">12:00 a 13:00</option>
+                                <option value="13:00 a 14:00">13:00 a 14:00</option>
+                                <option value="14:00 a 15:00">14:00 a 15:00</option>
+                                <option value="15:00 a 16:00">15:00 a 16:00</option>
+                                <option value="16:00 a 17:00">16:00 a 17:00</option>
+                                <option value="17:00 a 18:00">17:00 a 18:00</option>
+                                <option value="18:00 a 19:00">18:00 a 19:00</option>
+                                <option value="19:00 a 20:00">19:00 a 20:00</option>
+                                <option value="20:00 a 21:00">20:00 a 21:00</option>
+                                <option value="21:00 a 22:00">21:00 a 22:00</option>
+                            </select>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Enviar</button>
                         <button type="reset" class="btn btn-danger">Limpiar</button>
 
                     </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="modal-2" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>{{errorMsg}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modal-2" aria-label="Close"></button>
                 </div>
             </div>
 
@@ -123,7 +200,7 @@
      */
     const NOMBRE_KEY = "API_URL";
     if(localStorage.getItem(NOMBRE_KEY) == null){
-        localStorage.setItem(NOMBRE_KEY, "/api/estudiante/")
+        localStorage.setItem(NOMBRE_KEY, "/api/solicitudes/")
     }
     const URL_API = localStorage.getItem(NOMBRE_KEY);
 
@@ -133,17 +210,23 @@
 
         data(){
             return {
-
-                titulo: "Creación de Estudiante",
+                titulo: "Creación de Solicitud",
                 editando: false,
                 nuevo: {
+                    id: '',
                     matricula: '',
                     nombre: '',
-                    carrera: ''
+                    correo: '',
+                    laboratorio: '',
+                    fecha: '',
+                    hora: ''
                 },
-                estudiantes: [],
-                modal: ""
-
+                solicitudes: [],
+                solicitudesMostradas: [],
+                checkbox: "",
+                modal: "",
+                modalError: "",
+                errorMsg: "Mensaje de Error: No se pudo registrar la solicitud"
             }
         },
 
@@ -151,69 +234,130 @@
             console.log("Iniciando la aplicación en mounted: "+this.titulo);
             this.$nextTick(function () {  //garantizo que todos los elementos están renderizados.
                 console.log("Cargando todo el render del proyecto");
-                this.listaEstudiantes();
+                this.listaSolicitudes();
                 this.modal = new bootstrap.Modal(document.getElementById('modal-1'));
+                this.modalError = new bootstrap.Modal(document.getElementById('modal-2'));
+                this.checkbox = new bootstrap.Modal(document.getElementById('flexCheckIndeterminate'));
             });
         },
 
 
         methods: {
-
-            listaEstudiantes(){
-                console.log("Cargando lista de Estudiante");
+            listaSolicitudes(){
+                console.log("Cargando lista de Solicitudes");
                 axios.get(URL_API).then(response => {
                     //
                     console.log("Recuperando información del servidor");
                     //console.log("respuesta: "+JSON.stringify(response));
                     //
-                    this.estudiantes = response.data.data.estudiantes;
+                    this.solicitudes = response.data.data.solicitudes;
+                    this.listaSolicitudesMostradas();
                 }).catch(error => { console.log(error); });
             },
 
-            nuevoEstudiante(){
-                console.log("Nuevo Estudiante");
-                this.titulo = "Nuevo Estudiante";
+            listaSolicitudesMostradas(){
+                console.log("listaSolicitudesMostradas");
+                var fechaActual = new Date();
+                // Obtiene el año, mes y día
+                var year = fechaActual.getFullYear();
+                // El mes se devuelve de 0 a 11, por lo que necesitas sumarle 1
+                var month = ('0' + (fechaActual.getMonth() + 1)).slice(-2);
+                var day = ('0' + fechaActual.getDate()).slice(-2);
+                // Formatea la fecha en el formato "aaaa-mm-dd"
+                var fechaHoy = year + '-' + month + '-' + day;
+
+                // Filtrar elementos donde la fecha es menor a la fecha de hoy
+                this.solicitudesMostradas = this.solicitudes.filter((elemento) => {
+                    // Comparar las fechas
+                    if(this.checkbox.checked){
+                        return elemento.fecha < fechaHoy;
+                    }else {
+                        return elemento.fecha >= fechaHoy;
+                    }
+                });
+            },
+
+            nuevaSolicitud(){
+                console.log("Nueva Solicitud");
+                this.titulo = "Nueva Solicitud";
                 this.editando = false;
                 this.limpiar();
             },
 
-            crearActualizarEstudiante(){
+            crearActualizarSolicitud(){
                 console.log("datos para almacenar: ", this.nuevo);
+                var fechaActual = new Date();
+                // Obtiene el año, mes y día
+                var year = fechaActual.getFullYear();
+                // El mes se devuelve de 0 a 11, por lo que necesitas sumarle 1
+                var month = ('0' + (fechaActual.getMonth() + 1)).slice(-2);
+                var day = ('0' + fechaActual.getDate()).slice(-2);
+                // Formatea la fecha en el formato "aaaa-mm-dd"
+                var fechaHoy = year + '-' + month + '-' + day;
+                var horas = ('0' + fechaActual.getHours()).slice(-2);
+                var minutos = ('0' + fechaActual.getMinutes()).slice(-2);
+                var horaFormateada = horas + ':' + minutos;
 
+                // Encuentra la posición del primer espacio
+                var posicionEspacio = this.nuevo.hora.indexOf(" ");
+                // Obtiene la subcadena hasta el primer espacio
+                var subcadena = this.nuevo.hora.substring(0, posicionEspacio);
 
-                if(!this.editando){
-                    //creando
-                    axios.post(URL_API, this.nuevo).then(response => {
-                        this.limpiar();
-                        this.listaEstudiantes();
-                    }).catch(error => console.log(error));
-                } else{
-                    //editando
-                    axios.put(URL_API, this.nuevo).then(response => {
-                        this.limpiar();
-                        this.listaEstudiantes();
-
-                    }).catch(error => console.log(error));
+                if(this.nuevo.fecha <= fechaHoy && subcadena <= horaFormateada){
+                    this.errorMsg = "No es posible registrar solicitudes con fechas anteriores.";
+                    this.modalError.show();
+                }else{
+                    if(!this.editando){
+                        //creando
+                        axios.post(URL_API, this.nuevo).then(response => {
+                            if(response.data.data.error){
+                                this.errorMsg = response.data.data.mensajeError;
+                                this.modalError.show();
+                            }else{
+                                this.limpiar();
+                                this.listaSolicitudes();
+                            }
+                        }).catch(error => {
+                            this.errorMsg = error.message;
+                            this.modalError.show();
+                            console.log(error);
+                        });
+                    } else{
+                        //editando
+                        axios.put(URL_API, this.nuevo).then(response => {
+                            if(response.data.data.error){
+                                this.errorMsg = response.data.data.mensajeError;
+                                this.modalError.show();
+                            }else{
+                                this.limpiar();
+                                this.listaSolicitudes();
+                            }
+                        }).catch(error => {
+                            this.errorMsg = error.message;
+                            this.modalError.show();
+                            console.log(error);
+                        });
+                    }
+                    this.modal.hide();
                 }
-                this.modal.hide();
             },
 
-            editarEstudiante(estudiante) {
-                console.log("El estudiante seleccionado para actualizar: ", estudiante);
-                this.titulo = "Editando Estudiante - "+estudiante.matricula;
-                this.nuevo = Object.assign({}, estudiante); //copiando el objeto, evitando el cambio directo en el form.
+            editarSolicitud(solicitud) {
+                console.log("La Solicitud seleccionado para actualizar: ", solicitud);
+                this.titulo = "Editando Solicitud - "+solicitud.id;
+                this.nuevo = Object.assign({}, solicitud); //copiando el objeto, evitando el cambio directo en el form.
                 this.editando = true;
 
                 this.modal.show();
             },
 
-            eliminarEstudiante(estudiante) {
+            eliminarSolicitud(solicitud) {
 
-                const confirmed = confirm("¿Desea elminiar el estudiante: "+estudiante.matricula+"?");
+                const confirmed = confirm("¿Desea elminiar la solicitud: "+solicitud.id+"?");
                 if(confirmed) {
-                    console.log("Eliminando la matricula: ", estudiante);
-                    axios.delete(URL_API, {data: estudiante}).then(response => {
-                        this.listaEstudiantes();
+                    console.log("Eliminando la solicitud: ", solicitud);
+                    axios.delete(URL_API, {data: solicitud}).then(response => {
+                        this.listaSolicitudes();
                     }).catch(error => console.log(error));
                 }
             },
@@ -221,7 +365,10 @@
             limpiar() {
                 this.nuevo.matricula='';
                 this.nuevo.nombre='';
-                this.nuevo.carrera='';
+                this.nuevo.correo='';
+                this.nuevo.laboratorio='';
+                this.nuevo.fecha='';
+                this.nuevo.hora='';
             }
 
         }
