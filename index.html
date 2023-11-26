@@ -277,6 +277,7 @@
                     var subcadena = elemento.hora.substring(0, posicionEspacio);
                     // Comparar las fechas
                     if(this.checkbox.checked){
+                        console.log(elemento.fecha, fechaHoy, subcadena, horaFormateada);
                         return elemento.fecha < fechaHoy ||  (elemento.fecha <= fechaHoy && subcadena <= horaFormateada);
                     }else {
                         return elemento.fecha > fechaHoy ||  (elemento.fecha >= fechaHoy && subcadena > horaFormateada);
