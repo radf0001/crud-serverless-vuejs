@@ -265,14 +265,21 @@
                 var day = ('0' + fechaActual.getDate()).slice(-2);
                 // Formatea la fecha en el formato "aaaa-mm-dd"
                 var fechaHoy = year + '-' + month + '-' + day;
+                var horas = ('0' + fechaActual.getHours()).slice(-2);
+                var minutos = ('0' + fechaActual.getMinutes()).slice(-2);
+                var horaFormateada = horas + ':' + minutos;
 
                 // Filtrar elementos donde la fecha es menor a la fecha de hoy
                 this.solicitudesMostradas = this.solicitudes.filter((elemento) => {
+                    // Encuentra la posición del primer espacio
+                    var posicionEspacio = elemento.hora.indexOf(" ");
+                    // Obtiene la subcadena hasta el primer espacio
+                    var subcadena = elemento.hora.substring(0, posicionEspacio);
                     // Comparar las fechas
                     if(this.checkbox.checked){
-                        return elemento.fecha < fechaHoy;
+                        return elemento.fecha < fechaHoy && subcadena < horaFormateada;
                     }else {
-                        return elemento.fecha >= fechaHoy;
+                        return elemento.fecha >= fechaHoy && subcadena >= horaFormateada;
                     }
                 });
             },
@@ -303,7 +310,7 @@
                 // Obtiene la subcadena hasta el primer espacio
                 var subcadena = this.nuevo.hora.substring(0, posicionEspacio);
 
-                if(this.nuevo.fecha <= fechaHoy && subcadena <= horaFormateada){
+                if(this.nuevo.fecha <= fechaHoy ||  (this.nuevo.fecha <= fechaHoy && subcadena <= horaFormateada)){
                     this.errorMsg = "No es posible registrar solicitudes con fechas anteriores.";
                     this.modalError.show();
                 }else{
@@ -323,6 +330,7 @@
                             console.log(error);
                         });
                     } else{
+                        this.nuevo.id = '';
                         //editando
                         axios.put(URL_API, this.nuevo).then(response => {
                             if(response.data.error){
