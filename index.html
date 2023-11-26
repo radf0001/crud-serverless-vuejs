@@ -315,7 +315,7 @@
                     this.modalError.show();
                 }else{
                     if(!this.editando){
-                        this.nuevo.id = '';
+                        this.nuevo.id = null;
                         //creando
                         axios.post(URL_API, this.nuevo).then(response => {
                             if(response.data.error){
