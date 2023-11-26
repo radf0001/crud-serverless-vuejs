@@ -277,9 +277,9 @@
                     var subcadena = elemento.hora.substring(0, posicionEspacio);
                     // Comparar las fechas
                     if(this.checkbox.checked){
-                        return elemento.fecha < fechaHoy && subcadena < horaFormateada;
+                        return elemento.fecha < fechaHoy ||  (elemento.fecha <= fechaHoy && subcadena <= horaFormateada);
                     }else {
-                        return elemento.fecha >= fechaHoy && subcadena >= horaFormateada;
+                        return elemento.fecha > fechaHoy ||  (elemento.fecha >= fechaHoy && subcadena > horaFormateada);
                     }
                 });
             },
@@ -310,7 +310,7 @@
                 // Obtiene la subcadena hasta el primer espacio
                 var subcadena = this.nuevo.hora.substring(0, posicionEspacio);
 
-                if(this.nuevo.fecha < fechaHoy ||  (this.nuevo.fecha < fechaHoy && subcadena < horaFormateada)){
+                if(this.nuevo.fecha < fechaHoy ||  (this.nuevo.fecha <= fechaHoy && subcadena < horaFormateada)){
                     this.errorMsg = "No es posible registrar solicitudes con fechas anteriores.";
                     this.modalError.show();
                 }else{
