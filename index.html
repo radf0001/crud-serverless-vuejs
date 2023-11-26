@@ -237,7 +237,7 @@
                 this.listaSolicitudes();
                 this.modal = new bootstrap.Modal(document.getElementById('modal-1'));
                 this.modalError = new bootstrap.Modal(document.getElementById('modal-2'));
-                this.checkbox = new bootstrap.Modal(document.getElementById('flexCheckIndeterminate'));
+                this.checkbox = document.getElementById('flexCheckIndeterminate');
             });
         },
 
@@ -250,7 +250,7 @@
                     console.log("Recuperando información del servidor");
                     //console.log("respuesta: "+JSON.stringify(response));
                     //
-                    this.solicitudes = response.data.data.solicitudes;
+                    this.solicitudes = response.data.solicitudes;
                     this.listaSolicitudesMostradas();
                 }).catch(error => { console.log(error); });
             },
@@ -310,8 +310,8 @@
                     if(!this.editando){
                         //creando
                         axios.post(URL_API, this.nuevo).then(response => {
-                            if(response.data.data.error){
-                                this.errorMsg = response.data.data.mensajeError;
+                            if(response.data.error){
+                                this.errorMsg = response.data.mensajeError;
                                 this.modalError.show();
                             }else{
                                 this.limpiar();
@@ -325,8 +325,8 @@
                     } else{
                         //editando
                         axios.put(URL_API, this.nuevo).then(response => {
-                            if(response.data.data.error){
-                                this.errorMsg = response.data.data.mensajeError;
+                            if(response.data.error){
+                                this.errorMsg = response.data.mensajeError;
                                 this.modalError.show();
                             }else{
                                 this.limpiar();
